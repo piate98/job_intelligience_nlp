@@ -5,7 +5,7 @@ const API_BASE_URL =
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000,
+  timeout: 120000,
 });
 
 export const getHealth = () => api.get("/health");
