@@ -1,74 +1,25 @@
-
-/*
-// frontend/src/api/api.js
-
 import axios from "axios";
 
-/**
- * Backend URL:
- * - Local dev: http://127.0.0.1:8000
- * - Production: set VITE_API_BASE_URL in Vercel/Railway env vars
- *   Example: VITE_API_BASE_URL=https://your-backend.up.railway.app
- */
-
-
-
-/*
-
-const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 export const api = axios.create({
-  baseURL: API_BASE,
-  timeout: 20000,
+  baseURL: API_BASE_URL,
+  timeout: 30000,
 });
 
-export function getHealth() {
-  return api.get("/health");
-}
+export const getHealth = () => api.get("/health");
 
-export function getJobs(params = {}) {
-  return api.get("/jobs", { params });
-}
+export const getJobs = ({ q = "", limit = 100, job_family = "", seniority = "", location = "" } = {}) =>
+  api.get("/jobs", {
+    params: {
+      q: q || undefined,
+      limit,
+      job_family: job_family || undefined,
+      seniority: seniority || undefined,
+      location: location || undefined,
+    },
+  });
 
-// calls: GET /jobs/{job_id}/skills?top_n=20
-export function getJobSkills(jobId, top_n = 20) {
-  return api.get(`/jobs/${jobId}/skills`, { params: { top_n } });
-}
-
-
-*/
-
-// frontend/src/api/api.js
-
-import axios from "axios";
-
-/**
- * Backend URL:
- * - Local dev: http://127.0.0.1:8000
- * - Production: set VITE_API_BASE_URL in Vercel/Railway env vars
- *   Example: VITE_API_BASE_URL=https://your-backend.up.railway.app
- */
-
-
-
-
-
-const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
-
-export const api = axios.create({
-  baseURL: API_BASE,
-  timeout: 20000,
-});
-
-export function getHealth() {
-  return api.get("/health");
-}
-
-export function getJobs(params = {}) {
-  return api.get("/jobs", { params });
-}
-
-// calls: GET /jobs/{job_id}/skills?top_n=20
-export function getJobSkills(jobId, top_n = 20) {
-  return api.get(`/jobs/${jobId}/skills`, { params: { top_n } });
-}
+export const getJobSkills = (jobId, top_n = 20) =>
+  api.get(`/jobs/${jobId}/skills`, { params: { top_n } });
