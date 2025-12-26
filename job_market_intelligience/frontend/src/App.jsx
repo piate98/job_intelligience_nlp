@@ -184,7 +184,8 @@ export default function App() {
       </div>
 
       {/* Search Row */}
-      <div
+      <div className='card'>
+        <div
         className="searchRow"
         style={{
           display: "grid",
@@ -249,6 +250,7 @@ export default function App() {
             ))}
           </select>
         </div>
+      </div>
       </div>
 
       {/* Toggle */}

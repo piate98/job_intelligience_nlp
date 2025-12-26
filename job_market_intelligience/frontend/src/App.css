@@ -145,7 +145,24 @@
 /* ✅ Mobile improvements */
 @media (max-width: 520px) {
   .page {
-    padding: 14px;
+    display: inline-flex;
+    
+  }
+
+  .card{
+    padding-right: 1rem;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 15px;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+    
+  
+  
+
+  }
+
+  .appPage{
+    padding:1rem;
   }
 
   .pageTitle {
@@ -160,18 +177,19 @@
 
   /* Make search area compact + neat */
   .searchRow {
-    grid-template-columns: 1fr;   /* stack */
-    gap: 10px;
+      /* stack */
+    
+   
   }
 
   .searchInput {
-    width: 100%;
     font-size: 16px; /* better on mobile */
+    margin-right: 1rem;
+    display: inline;   
   }
 
   .btnPrimary,
   .btnSecondary {
-    width: 100%;
     padding: 12px 14px;
     font-weight: 600;
   }
@@ -306,6 +324,7 @@
   /* tighter page padding like a phone UI */
   .appPage {
     padding: 14px !important;
+    
   }
 
   /* Search row becomes stacked */
@@ -381,5 +400,4 @@
     padding: 14px !important;
   }
 }
-
 
