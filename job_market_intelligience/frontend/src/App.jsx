@@ -1,7 +1,7 @@
-
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { getHealth, getJobs, getJobSkills } from "./api/api";
 import SkillOverview from "./components/SkillOverview";
+import "./App.css";
 
 // Small concurrency limiter (to avoid spamming the backend)
 async function mapWithConcurrency(items, concurrency, mapper) {
@@ -40,8 +40,8 @@ export default function App() {
 
   // Market aggregated skills
   const [marketLoading, setMarketLoading] = useState(false);
-  const [marketSkillsAll, setMarketSkillsAll] = useState([]); // flattened list of skills occurrences
-  const [marketTopSkills, setMarketTopSkills] = useState([]); // [{skill,count}]
+  const [marketSkillsAll, setMarketSkillsAll] = useState([]);
+  const [marketTopSkills, setMarketTopSkills] = useState([]);
 
   // Cache: jobId -> skills array
   const skillsCacheRef = useRef(new Map());
@@ -77,7 +77,6 @@ export default function App() {
   // Load jobs at startup
   useEffect(() => {
     fetchJobs();
-    
   }, []);
 
   // When selected job changes, load its skills (job view)
@@ -121,10 +120,8 @@ export default function App() {
     async function buildMarket() {
       setMarketLoading(true);
 
-      // use the currently loaded jobs list (limit controls how many jobs are loaded)
       const jobIds = jobs.map((j) => j.job_id);
 
-      // Fetch skills for each job (cached + concurrency-limited)
       const results = await mapWithConcurrency(jobIds, 10, async (jobId) => {
         if (skillsCacheRef.current.has(jobId)) {
           return skillsCacheRef.current.get(jobId).skills || [];
@@ -142,14 +139,12 @@ export default function App() {
 
       if (cancelled) return;
 
-      // Flatten skill occurrences (frequency matters in market view)
       const flat = results
         .filter(Boolean)
         .flat()
         .map((s) => String(s).toLowerCase().trim())
         .filter(Boolean);
 
-      // Count frequency
       const counts = new Map();
       for (const s of flat) counts.set(s, (counts.get(s) || 0) + 1);
 
@@ -164,7 +159,6 @@ export default function App() {
     }
 
     buildMarket();
-
     return () => {
       cancelled = true;
     };
@@ -181,13 +175,27 @@ export default function App() {
   }, [selectedJob]);
 
   return (
-    <div style={{ padding: "24px", maxWidth: 1200, margin: "0 auto" }}>
-      <h1 style={{ marginBottom: 6 }}>Job Market Intelligence</h1>
-      <div style={{ opacity: 0.8, marginBottom: 14 }}>Backend status: {backendStatus}</div>
+    <div className="appPage" style={{ padding: "24px", maxWidth: 1200, margin: "0 auto" }}>
+      <h1 className="appTitle" style={{ marginBottom: 6 }}>
+        Job Market Intelligence
+      </h1>
+      <div className="backendStatus" style={{ opacity: 0.8, marginBottom: 14 }}>
+        Backend status: {backendStatus}
+      </div>
 
       {/* Search Row */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", gap: 10, alignItems: "center", marginBottom: 16 }}>
+      <div
+        className="searchRow"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr auto auto auto",
+          gap: 10,
+          alignItems: "center",
+          marginBottom: 16,
+        }}
+      >
         <input
+          className="searchInput"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search job title, company, keywords..."
@@ -195,27 +203,41 @@ export default function App() {
         />
 
         <button
+          className="searchBtn"
           onClick={fetchJobs}
-          style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid rgba(0,0,0,0.25)", background: "black", color: "white" }}
+          style={{
+            padding: "10px 14px",
+            borderRadius: 10,
+            border: "1px solid rgba(0,0,0,0.25)",
+            background: "black",
+            color: "white",
+          }}
         >
           Search
         </button>
 
         <button
+          className="resetBtn"
           onClick={() => {
             setQ("");
             setLimit(500);
             setViewMode("job");
             fetchJobs();
           }}
-          style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid rgba(0,0,0,0.25)", background: "white" }}
+          style={{
+            padding: "10px 14px",
+            borderRadius: 10,
+            border: "1px solid rgba(0,0,0,0.25)",
+            background: "white",
+          }}
         >
           Reset
         </button>
 
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <div className="limitWrap" style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <div style={{ opacity: 0.8 }}>Limit</div>
           <select
+            className="limitSelect"
             value={limit}
             onChange={(e) => setLimit(Number(e.target.value))}
             style={{ padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(0,0,0,0.25)" }}
@@ -230,8 +252,9 @@ export default function App() {
       </div>
 
       {/* Toggle */}
-      <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
+      <div className="toggleRow" style={{ display: "flex", gap: 10, marginBottom: 16 }}>
         <button
+          className={`toggleBtn ${viewMode === "job" ? "active" : ""}`}
           onClick={() => setViewMode("job")}
           style={{
             padding: "10px 14px",
@@ -245,6 +268,7 @@ export default function App() {
         </button>
 
         <button
+          className={`toggleBtn ${viewMode === "market" ? "active" : ""}`}
           onClick={() => setViewMode("market")}
           style={{
             padding: "10px 14px",
@@ -258,28 +282,31 @@ export default function App() {
         </button>
 
         {viewMode === "market" ? (
-          <div style={{ alignSelf: "center", opacity: 0.75 }}>
+          <div className="marketMeta" style={{ alignSelf: "center", opacity: 0.75 }}>
             {marketLoading ? "Building market skills…" : `Aggregated across ${jobs.length} jobs`}
           </div>
         ) : null}
       </div>
 
       {/* Main Layout */}
-      <div style={{ display: "grid", gridTemplateColumns: "420px 1fr", gap: 18 }}>
+      <div className="mainGrid" style={{ display: "grid", gridTemplateColumns: "420px 1fr", gap: 18 }}>
         {/* Jobs list */}
-        <div style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, padding: 14 }}>
+        <div className="panel jobsPanel" style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, padding: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
             <h2 style={{ margin: 0 }}>Jobs</h2>
-            
           </div>
 
-          <div style={{ display: "grid", gap: 10, maxHeight: 560, overflow: "auto", paddingRight: 6 }}>
+          <div
+            className="jobsList"
+            style={{ display: "grid", gap: 10, maxHeight: 560, overflow: "auto", paddingRight: 6 }}
+          >
             {jobs.map((j) => {
               const active = selectedJob?.job_id === j.job_id;
               return (
                 <button
                   key={j.job_id}
                   onClick={() => setSelectedJob(j)}
+                  className={`jobCard ${active ? "active" : ""}`}
                   style={{
                     textAlign: "left",
                     padding: 12,
@@ -303,7 +330,7 @@ export default function App() {
         </div>
 
         {/* Skills panel */}
-        <div style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, padding: 14 }}>
+        <div className="panel skillsPanel" style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12, padding: 14 }}>
           {viewMode === "job" ? (
             <SkillOverview
               mode="job"

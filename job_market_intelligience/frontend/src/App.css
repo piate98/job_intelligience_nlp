@@ -5,6 +5,104 @@
   text-align: center;
 }
 
+/* Page wrapper */
+.page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pageHeader {
+  margin-bottom: 16px;
+}
+
+.pageTitle {
+  margin: 0 0 6px 0;
+  line-height: 1.05;
+}
+
+.pageSub {
+  opacity: 0.8;
+  margin-bottom: 14px;
+}
+
+/* Search row (desktop defaults) */
+.searchRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.searchInput {
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.2);
+  min-width: 0;
+}
+
+.btnPrimary {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.25);
+  background: black;
+  color: white;
+}
+
+.btnSecondary {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.25);
+  background: white;
+  color: black;
+}
+
+.limitWrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.limitLabel {
+  opacity: 0.8;
+}
+
+.limitSelect {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.25);
+}
+
+/* Toggle row */
+.toggleRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.pill {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.25);
+  background: white;
+  color: black;
+}
+
+.pillActive {
+  background: black;
+  color: white;
+}
+
+.toggleNote {
+  opacity: 0.75;
+  font-size: 13px;
+}
+
+
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -16,6 +114,134 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+/* SkillOverview layout */
+.skillGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.skillCard {
+  padding: 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+}
+
+.skillChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skillChip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.15);
+  font-size: 12px;
+}
+/* ✅ Mobile improvements */
+@media (max-width: 520px) {
+  .page {
+    padding: 14px;
+  }
+
+  .pageTitle {
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .pageSub {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  /* Make search area compact + neat */
+  .searchRow {
+    grid-template-columns: 1fr;   /* stack */
+    gap: 10px;
+  }
+
+  .searchInput {
+    width: 100%;
+    font-size: 16px; /* better on mobile */
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+    padding: 12px 14px;
+    font-weight: 600;
+  }
+
+  .limitWrap {
+    
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 12px;
+    background: rgba(0,0,0,0.03);
+  }
+
+  .limitSelect {
+    flex: 0 0 auto;
+  }
+  select {
+    width: 100%;
+  }
+
+  /* container holding "Limit" + select */
+  .limitWrap,
+  .limit-wrap,
+  div:has(> select) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  /* "Limit" label */
+  .limitLabel {
+    text-align: center;
+    font-size: 13px;
+    opacity: 0.75;
+  }
+  select {
+    width: 100%;
+  }
+
+
+
+
+  .toggleRow {
+    gap: 8px;
+  }
+
+  .pill {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 12px 14px;
+    font-weight: 600;
+  }
+
+  .toggleNote {
+    width: 100%;
+    text-align: center;
+    margin-top: 4px;
+  }
+}
+/* ✅ MOBILE: stack breakdown then detected skills */
+@media (max-width: 768px) {
+  .skillGrid {
+    grid-template-columns: 1fr; /* stack */
+    gap: 12px;
+  }
+
+  .skillCard {
+    padding: 12px;
+  }
 }
 
 @keyframes logo-spin {
@@ -40,3 +266,120 @@
 .read-the-docs {
   color: #888;
 }
+/* src/App.css */
+
+/* Desktop stays exactly as your inline styles define it */
+
+/* Mobile layout */
+@media (max-width: 900px) {
+  .appPage {
+    padding: 14px !important;
+  }
+
+  /* Search row becomes stacked */
+  .searchRow {
+    grid-template-columns: 1fr !important;
+  }
+
+  .toggleRow {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Main grid becomes one column */
+  .mainGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Remove fixed height scrolling on mobile so it feels natural */
+  .jobsList {
+    max-height: none !important;
+    overflow: visible !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* =========================
+   Mobile stacked layout
+   ========================= */
+@media (max-width: 768px) {
+  /* tighter page padding like a phone UI */
+  .appPage {
+    padding: 14px !important;
+  }
+
+  /* Search row becomes stacked */
+  .searchRow {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .searchRow input,
+  .searchRow button,
+  .searchRow select {
+    width: 100% !important;
+  }
+
+  /* Limit row also full width */
+  .limitWrap {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .limitSelect {
+    width: 140px !important; /* keep it neat; change if you want full width */
+  }
+
+  /* Toggle row wraps nicely on mobile */
+  .toggleRow {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  .toggleBtn {
+    flex: 1 1 auto !important;
+  }
+
+  
+
+  .skillsGrid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;  /* 1 column */
+    gap: 12px !important;
+  }
+
+  /* Optional: make sure cards span full width */
+  .skillsGrid > * {
+    width: 100% !important;
+  }
+
+
+  /* MAIN: stack panels vertically (Jobs then Skills) */
+  .mainGrid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  /* Panels look like “cards” */
+  .panel {
+    border-radius: 16px !important;
+    padding: 14px !important;
+  }
+
+  /* Jobs list shouldn’t be locked to a desktop height */
+  .jobsList {
+    max-height: none !important;
+    overflow: visible !important;
+    padding-right: 0 !important;
+  }
+
+  /* Job cards slightly bigger tap targets */
+  .jobCard {
+    padding: 14px !important;
+  }
+}
+
+

@@ -1,4 +1,3 @@
-
 import React from "react";
 
 const CATEGORY_ORDER = [
@@ -10,27 +9,63 @@ const CATEGORY_ORDER = [
   "Other",
 ];
 
-
 function skillToCategory(skill) {
   const s = String(skill || "").toLowerCase();
 
   // Programming
-  if (["python", "java", "c++", "javascript", "typescript", "git", "linux"].includes(s)) return "Programming";
+  if (
+    ["python", "java", "c++", "javascript", "typescript", "git", "linux"].includes(
+      s
+    )
+  )
+    return "Programming";
 
   // Data / SQL
   if (
-    ["sql", "postgresql", "mysql", "mongodb", "snowflake", "bigquery", "dbt", "etl", "spark", "airflow", "pandas", "numpy", "excel"].includes(s)
+    [
+      "sql",
+      "postgresql",
+      "mysql",
+      "mongodb",
+      "snowflake",
+      "bigquery",
+      "dbt",
+      "etl",
+      "spark",
+      "airflow",
+      "pandas",
+      "numpy",
+      "excel",
+    ].includes(s)
   )
     return "Data / SQL";
 
   // ML / AI
   if (
-    ["machine learning", "deep learning", "nlp", "pytorch", "tensorflow", "scikit-learn", "xgboost", "lightgbm", "transformers", "bert", "llm", "hugging face"].includes(s)
+    [
+      "machine learning",
+      "deep learning",
+      "nlp",
+      "pytorch",
+      "tensorflow",
+      "scikit-learn",
+      "xgboost",
+      "lightgbm",
+      "transformers",
+      "bert",
+      "llm",
+      "hugging face",
+    ].includes(s)
   )
     return "ML / AI";
 
   // Cloud / DevOps
-  if (["aws", "gcp", "azure", "docker", "kubernetes", "fastapi", "flask", "rest", "graphql"].includes(s)) return "Cloud / DevOps";
+  if (
+    ["aws", "gcp", "azure", "docker", "kubernetes", "fastapi", "flask", "rest", "graphql"].includes(
+      s
+    )
+  )
+    return "Cloud / DevOps";
 
   // Visualization
   if (["tableau", "power bi"].includes(s)) return "Visualization";
@@ -53,10 +88,25 @@ function BarRow({ label, value, max }) {
   const pct = max > 0 ? Math.round((value / max) * 100) : 0;
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "140px 1fr 50px", gap: "10px", alignItems: "center", margin: "8px 0" }}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "140px 1fr 50px",
+        gap: "10px",
+        alignItems: "center",
+        margin: "8px 0",
+      }}
+    >
       <div style={{ fontSize: 13, opacity: 0.9 }}>{label}</div>
       <div style={{ height: 10, background: "rgba(0,0,0,0.08)", borderRadius: 999 }}>
-        <div style={{ width: `${pct}%`, height: 10, borderRadius: 999, background: "rgba(20,80,200,0.75)" }} />
+        <div
+          style={{
+            width: `${pct}%`,
+            height: 10,
+            borderRadius: 999,
+            background: "rgba(20,80,200,0.75)",
+          }}
+        />
       </div>
       <div style={{ textAlign: "right", fontSize: 12, opacity: 0.75 }}>{value}</div>
     </div>
@@ -72,24 +122,23 @@ export default function SkillOverview({
 }) {
   const categoryCounts = buildCategoryCounts(skills);
   const total = skills.length;
-
   const catMax = Math.max(...Object.values(categoryCounts), 0);
 
   return (
-    <div>
+    <div className="skillOverview">
       <h2 style={{ margin: "0 0 8px 0" }}>{headerTitle}</h2>
       {headerSubtitle ? <div style={{ marginBottom: 12, opacity: 0.8 }}>{headerSubtitle}</div> : null}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, alignItems: "start" }}>
+      {/* ✅ IMPORTANT: className instead of inline gridTemplateColumns */}
+      <div className="skillGrid">
         {/* Left: category breakdown */}
-        <div style={{ padding: 14, border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12 }}>
+        <div className="skillCard">
           <div style={{ fontWeight: 600, marginBottom: 6 }}>
             {mode === "job" ? "Skill breakdown (this job)" : "Skill breakdown (market — current results)"}
           </div>
+
           <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 10 }}>
-            {mode === "job"
-              ? `Total detected: ${total}`
-              : `Total skill mentions aggregated: ${total}`}
+            {mode === "job" ? `Total detected: ${total}` : `Total skill mentions aggregated: ${total}`}
           </div>
 
           {CATEGORY_ORDER.map((c) => (
@@ -97,19 +146,22 @@ export default function SkillOverview({
           ))}
         </div>
 
-        {/* Right: Top skills list */}
-        <div style={{ padding: 14, border: "1px solid rgba(0,0,0,0.08)", borderRadius: 12 }}>
+        {/* Right: detected/top skills */}
+        <div className="skillCard">
           <div style={{ fontWeight: 600, marginBottom: 10 }}>
             {mode === "job" ? "Detected skills" : "Top skills (frequency)"}
           </div>
 
           {mode === "job" ? (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            <div className="skillChips">
               {skills.length === 0 ? (
                 <div style={{ opacity: 0.7 }}>No skills detected for this job.</div>
               ) : (
-                skills.map((s) => (
-                  <span key={s} style={{ padding: "6px 10px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.15)", fontSize: 12 }}>
+                skills.map((s, i) => (
+                  <span
+                    key={`${s}-${i}`}
+                    className="skillChip"
+                  >
                     {s}
                   </span>
                 ))
